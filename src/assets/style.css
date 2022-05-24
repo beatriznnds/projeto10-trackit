@@ -1,0 +1,12 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #e5e5e5;
+    font-family: 'Lexend Deca', sans-serif;
+}
+
+a {
+    text-decoration: none;
+}
