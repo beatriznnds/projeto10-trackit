@@ -9,11 +9,13 @@ import styled from 'styled-components'
 export default function SignUp () {
     const [data, setData] = useState({email: "", name: "", image: "", password: ""})
     const navigate = useNavigate();
-    const [dataLoading, setDataLoading] = useState({loading: false, classNameLoading: ""})
+    const [disable, setDisable] = useState(false);
+    const [buttonText, setButtonText] = useState('Cadastrar');
 
     function sendData (event) {
         event.preventDefault();
-        setDataLoading({...dataLoading, loading: true, classNameLoading: "input-disabled"})
+        setDisable(true);
+        setButtonText( <ThreeDots color="#FFFFFF" height={15} width={50} /> )
 
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/sign-up', {
             email: data.email,
@@ -25,7 +27,9 @@ export default function SignUp () {
             navigate('/')
         }) 
         promise.catch((err) => {
-            alert('Houve um erro no Cadastro! Verifique os dados.')
+            alert('Houve um erro no Cadastro! Verifique os dados.');
+            setDisable(false);
+            setButtonText( 'Cadastrar' );
         })       
     }
 
@@ -40,8 +44,7 @@ export default function SignUp () {
                     placeholder="email"
                     onChange={(e) => setData({...data, email: e.target.value})}
                     required
-                    disabled={dataLoading.loading}
-                    className={dataLoading.classNameLoading}
+                    disabled={disable}
                 />
                 <input
                     value={data.password}
@@ -50,8 +53,7 @@ export default function SignUp () {
                     placeholder="senha"
                     onChange={(e) => setData({...data, password: e.target.value})}
                     required
-                    disabled={dataLoading.loading}
-                    className={dataLoading.classNameLoading}
+                    disabled={disable}
                 />
                 <input
                     value={data.name}
@@ -60,8 +62,7 @@ export default function SignUp () {
                     placeholder="nome"
                     onChange={(e) => setData({...data, name: e.target.value})}
                     required
-                    disabled={dataLoading.loading}
-                    className={dataLoading.classNameLoading}
+                    disabled={disable}
                 />
                 <input
                     value={data.image}
@@ -70,22 +71,13 @@ export default function SignUp () {
                     placeholder="foto de perfil"
                     onChange={(e) => setData({...data, image: e.target.value})}
                     required
-                    disabled={dataLoading.loading}
-                    className={dataLoading.classNameLoading}
-                />                
+                    disabled={disable}
+                />     
+                <Button disabled={disable} type="submit">
+                    {buttonText}
+                </Button>           
             </Form>
-            <Button disabled={dataLoading}>
-                {dataLoading.loading ? (
-                    <ThreeDots
-                        color="#FFFFFF"
-                        height={15}
-                        width={50}
 
-                    />
-                ) : (
-                    "Cadastrar"
-                )}
-            </Button>
             <Link to='/'>
                 <p>Já tem uma conta? Faça login!</p>
             </Link>
@@ -94,11 +86,9 @@ export default function SignUp () {
 }
 
 const Container=styled.div`
-    width: 100%;
-    height: 100vh
     display: flex;
-    align-items: center;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
     margin-top: 75px;
 
@@ -107,6 +97,7 @@ const Container=styled.div`
         color: #52b6ff;
         text-decoration: underline;
         margin-bottom: 100px;
+        margin-top: 10px;
     }
 
     img {
@@ -121,6 +112,7 @@ const Form=styled.form`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-top: 20px;
 
     input {
         width: 300px;
@@ -149,5 +141,6 @@ const Button=styled.button`
     border-radius: 5px;
     font-size: 20px;
     color: #ffffff;
+    margin-top: 25px;
 
 `

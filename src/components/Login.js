@@ -11,29 +11,34 @@ export default function Login () {
 
     const navigate = useNavigate();
     const [data, setData] = useState({email: "", password: ""});
-    const [dataLoading, setDataLoading] = useState({loading: false, classNameLoading: ""});
+    const [disable, setDisable] = useState(false);
+    const [buttonText, setButtonText] = useState('Entrar');
     const { user, setUser } = useContext(UserContext);
 
     function Login (event) {
         event.preventDefault();
-        setDataLoading({...dataLoading, loading:true, classNameLoading: "input-disabled"});
+        setDisable(true)
+        setButtonText( <ThreeDots color="#FFFFFF" height={15} width={50} /> )
+
         const promise = axios.post('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login', {
             email: data.email,
             password: data.password
         });
         promise.then((res) => {
-            localStorage.setItem("userdata", JSON.stringify({
-                name: res.data.name,
+            localStorage.setItem("userdata", ({
+                name: res.data.name, 
                 email: res.data.email,
-                image: res.data.image,
-                token: res.data.token
-            }))
-            const { data } = res;
-            setUser({...user, name: data.name, image: data.image, email: data.email, token: data.token})
+                image: res.data.image, 
+                token: res.data.token 
+            }));
+            const { user } = res.data
+            navigate('/hoje');
+            setUser({...user, name: user.name, image: user.image, email: user.email, token: user.token});
         })
         promise.catch((err) =>{
             alert('Houve um erro no Cadastro! Verifique os dados.')
-            setDataLoading({...dataLoading, loading:false, classNameLoading: ""})
+            setDisable(false);
+            setButtonText('Entrar')
         })
     }
 
@@ -46,35 +51,30 @@ export default function Login () {
                     placeholder="email"
                     value={data.email}
                     required
-                    disabled={dataLoading.loading}
-                    className={dataLoading.classNameLoading}
+                    disabled={disable}
                     onChange={(e) => setData({...data, email: e.target.value})} 
                 />
                 <input
                     type="password"
-                    placeholder="password"
+                    placeholder="senha"
                     value={data.password}
                     required
-                    disabled={dataLoading.loading}
-                    className={dataLoading.classNameLoading}
+                    disabled={disable}
                     onChange={(e) => setData({...data, password: e.target.value})} 
                 />
-                <Button disabled={dataLoading}>
-                    {dataLoading.loading ? (
-                        <ThreeDots
-                            color="#FFFFFF"
-                            height={15}
-                            width={50}
-
-                        />
-                    ) : (
-                        "Entrar"
-                    )}
+                <Button disabled={disable} type="submit">
+                    {buttonText}
                 </Button>
+                {
+                    disable ?
+                    <p>Não tem uma conta? Cadastre-se!</p> :
+                    <Link to='/cadastro'>
+                        <p>Não tem uma conta? Cadastre-se!</p>
+                    </Link>
+
+                }
             </Form>
-            <Link to='/cadastro'>
-                <p>Não tem uma conta? Cadastre-se!</p>
-            </Link>
+
         </Container>
 
     )
@@ -92,6 +92,7 @@ const Container=styled.div`
         color: #52b6ff;
         text-decoration: underline;
         margin-bottom: 100px;
+        margin-top: 10px;
     }
 
 
@@ -105,6 +106,7 @@ const Form=styled.form`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-top: 20px;
 
     input {
         width: 300px;
@@ -133,5 +135,6 @@ const Button=styled.button`
     border-radius: 5px;
     font-size: 20px;
     color: #ffffff;
+    margin-top: 25px;
 
 `

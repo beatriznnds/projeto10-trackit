@@ -11,8 +11,11 @@ import DataHistory from './DataHistory';
 
 export default function App () {
 
-    const lastUser = JSON.parse(localStorage.getItem("Last User"))
-    const [user, setUser] = useState(lastUser);
+    const [user, setUser] = useState(
+        localStorage.getItem('userdata')
+            ? localStorage.getItem('userdata')
+            : null
+    );
     const [progress, setProgress] = useState(0);
 
     return (
