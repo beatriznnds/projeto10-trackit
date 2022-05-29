@@ -15,6 +15,8 @@ export default function Footer () {
             </Link>
             <Link to="/hoje">
                 <CircularProgressbar 
+                    width={90}
+                    height={90}
                     className="progress-bar"
                     value={progress}
                     text={"Hoje"}
@@ -24,6 +26,8 @@ export default function Footer () {
                         textColor: '#FFFFFF',
                         pathColor: '#FFFFFF',
                         trailColor: 'transparent'
+                        
+
                     })}
                 />
             </Link>
@@ -38,6 +42,7 @@ const Container=styled.div`
     width: 100%;
     height: 70px;
     background-color: #ffffff;
+    color: #52B6FF;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -46,5 +51,15 @@ const Container=styled.div`
     bottom: 0;
     left: 0;
     font-size: 18px;
-    padding: 20 px;
+    padding: 20px 30px;
+
+    a {
+        text-decoration: none;
+    }
+
+    .progress-bar {
+        width: 90px;
+        margin-bottom: 35px;
+    }
+
 `

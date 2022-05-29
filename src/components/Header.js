@@ -19,15 +19,17 @@ const Container=styled.div`
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 20px;
 
     img {
         width: 50px;
         height: 50px;
         border-radius: 50%;
+        z-index: 1;
     }
     
     h1 {

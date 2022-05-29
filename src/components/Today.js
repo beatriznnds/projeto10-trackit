@@ -13,6 +13,8 @@ export default function Today () {
     const [habitsList, setHabitsList] = useState();
     const date = dayjs().locale('pt-br').format('dddd, DD/MM');
 
+    console.log(user.token)
+
 
     function listTodayHabits () {
         const config = { headers: { Authorization: `Bearer ${user.token}` } };
@@ -24,7 +26,7 @@ export default function Today () {
                 res.data.length) * 100
             )
         })
-        promise.catch(alert('Erro ao carregar lista!'))
+        promise.catch(() => alert('Erro ao carregar lista!'))
 
     }
 
@@ -42,7 +44,7 @@ export default function Today () {
         };
         const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/check`, null, config);
         promise.then(listTodayHabits);
-        promise.catch(alert('Algo deu errado!'))
+        promise.catch(() => alert('Algo deu errado!'))
     }
 
     const uncheckHabit = (id) =>  {
@@ -53,7 +55,7 @@ export default function Today () {
         };
         const promise = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}/uncheck`, null, config);
         promise.then(listTodayHabits);
-        promise.catch(alert('Algo deu errado!'))
+        promise.catch(() => alert('Algo deu errado!'))
     }
 
     useEffect(() => {
@@ -70,9 +72,9 @@ export default function Today () {
             {
                 habitsList ? (
                     progress > 0 ? (
-                        <Subtitle>{progress.toFixed()}% dos hábitos concluídos</Subtitle>
+                        <Subtitle done={true}>{progress.toFixed()}% dos hábitos concluídos</Subtitle>
                     ) : (
-                        <Subtitle>Nenhum hábito concluído ainda</Subtitle>
+                        <Subtitle done={false}>Nenhum hábito concluído ainda</Subtitle>
                     )
                 ) : (
                     <></>
@@ -81,7 +83,7 @@ export default function Today () {
             <Habits>
                 {
                     habitsList ? (
-                    habitsList.map((value, index) => <TodayHabit key={index} value={value} handleClick={() => toggle(value.id)} /> ))
+                    habitsList.map((habit, index) => <TodayHabit key={index} habit={habit} handleClick={() => toggle(habit.id)} /> ))
                     :
                     <p>Você não tem hábitos para hoje.</p>
                 }
@@ -94,15 +96,17 @@ export default function Today () {
 }
 
 const Container=styled.div`
-    margin-top: 200px;
+    margin-top: 100px;
     display: flex;
-    align-items: center;
+    align-items: left;
     flex-direction: column;
+    margin-left: 20px;
 
     h2 {
         font-size: 24px;
         color: #126BA5;
         text-transform: capitalize;
+        margin-bottom: 10px;
     }
 `
 
@@ -110,13 +114,16 @@ const Subtitle=styled.p`
     font-size: 18px;
     color: ${props => props.done ? '#8FC549' : '#bababa'}
     margin-top: 10px;
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 `
 
 const Habits=styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
     p {
         color: #bababa;
         font-size: 18px;
-        margin-left: 20px;
     }
 `

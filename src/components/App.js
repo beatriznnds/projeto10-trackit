@@ -1,7 +1,7 @@
 import "../assets/reset.css";
 import "../assets/style.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UserContext from '../contexts/UserContext.js'
 import Login from './Login';
 import SignUp from './SignUp';
@@ -13,11 +13,12 @@ export default function App () {
 
     const [user, setUser] = useState(
         localStorage.getItem('userdata')
-            ? localStorage.getItem('userdata')
+            ? JSON.parse(localStorage.getItem('userdata'))
             : null
     );
     const [progress, setProgress] = useState(0);
 
+    console.log(user)
     return (
         <BrowserRouter>
             <UserContext.Provider value={{user, setUser, progress, setProgress}}>

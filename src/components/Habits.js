@@ -19,7 +19,10 @@ export default function Habits () {
         promise.then((res) => {
             setHabitsList(res.data)
         })
-        promise.catch(alert('Problemas ao carregar sua lista de hábitos!'))
+        promise.catch((err) => {
+            console.log(err)
+            alert('Problemas ao carregar sua lista de hábitos!')
+        })
     }
 
 
@@ -49,15 +52,21 @@ export default function Habits () {
                 <NewHabit formDisplayHidden={formDisplayHidden} setFormDisplayHidden={setFormDisplayHidden} getListHabits={() => getListHabits()}/>
                 {
                     habitsList.length > 0 ?
-                    habitsList.map(({id, name}) => (
+                    habitsList.map(({id, name, days}) => (
                         <Habit>
-                            <p>{name}</p>
-                            <Day>
-                                {weekdays.map((day) =>(
-                                    <p>{day}</p>
-                                ))}
-                            </Day>
-                            <ion-icon name="trash-outline"  onClick={() => deleteHabit(id)}></ion-icon>
+                            <HabitDiv>
+                                <p>{name}</p>
+                                <ion-icon name="trash-outline"  onClick={() => deleteHabit(id)}></ion-icon>
+                            </HabitDiv> 
+                            <Days>
+                                
+                                {weekdays.map((day, index) =>{
+                                   console.log(days.includes(index))
+                                   return <Day done={days.includes(index)}>{day}</Day>
+                                   
+                            })}
+                            </Days>                       
+                         
                         </Habit>
                     ))
                     : <p>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</p>
@@ -73,7 +82,7 @@ const Container=styled.div`
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: left;
     margin-top: 100px;
     padding: 20px;
 
@@ -90,11 +99,11 @@ const Container=styled.div`
     ion-icon {
         font-size: 15px;
     }
-
 `
 const HabitsHeader=styled.div`
+    width: 100%;
     display:flex;
-    align-items: space-between;
+    justify-content: space-between;
 `
 
 const Add=styled.div`
@@ -109,9 +118,36 @@ const Add=styled.div`
 
 `
 
-const Habit=styled.div`
+const HabitDiv=styled.div`
+    display: flex;
+    justify-content: space-between;
 `
 
-const Day=styled.div`
+const Habit=styled.div`
+    width: 340px;
+    height: 90px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    margin: 10px;
+    padding: 10px;
+`
+const Days=styled.div`
+    display: flex;
+    margin-top: 5px;
+    margin-bottom: 5px;
+`
+
+const Day=styled.p`
+    width: 30px;
+    height: 30px;
+    border: 1px #D4D4D4 solid;
+    background-color: ${ props => props.done ? '#CFCFCF' : '#FFFFFF'} ;
+    color: ${ props => props.done ? '#FFFFFF' : '#DBDBDB'} ;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 5px;
+    margin-right: 5px;
+    border-radius: 5px;
 `
 

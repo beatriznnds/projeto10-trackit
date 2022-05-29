@@ -25,15 +25,18 @@ export default function Login () {
             password: data.password
         });
         promise.then((res) => {
-            localStorage.setItem("userdata", ({
+            localStorage.setItem("userdata", JSON.stringify({
                 name: res.data.name, 
                 email: res.data.email,
                 image: res.data.image, 
                 token: res.data.token 
             }));
-            const { user } = res.data
+            const { data } = res
+            console.log("res.data", res.data)                     
+            setUser({...data, name: data.name, image: data.image, email: data.email, token: data.token});
+            console.log("user", JSON.stringify(user))  
+            console.log({...data, name: data.name, image: data.image, email: data.email, token: data.token})
             navigate('/hoje');
-            setUser({...user, name: user.name, image: user.image, email: user.email, token: user.token});
         })
         promise.catch((err) =>{
             alert('Houve um erro no Cadastro! Verifique os dados.')

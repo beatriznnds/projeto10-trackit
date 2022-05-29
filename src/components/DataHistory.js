@@ -7,27 +7,14 @@ import styled from 'styled-components';
 export default function DataHistory () {
 
     const { user } = useContext(UserContext);
-    const {habitsHistory, setHabitsHistory} = useState([]);
-
-    useEffect (() => {
-        const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        const promise = axios.get('https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/history/daily', config);
-        promise.then((res) => setHabitsHistory(res.data))
-    })
 
     return (
         <>
             <Header />
             <Container>
                 <h1>Meu histórico</h1>
-                {
-                    habitsHistory ? (
-                        habitsHistory.map((value) =>
-                        <p>{value}</p>)
-                    ) : (
-                        <p>Em breve você poderá ver o histórico dos seus hábitos aqui!</p>
-                    )
-                }                
+                <p>Em breve você poderá ver o histórico dos seus hábitos aqui!</p>
+                                
             </Container>
             <Footer />
         </>
@@ -36,4 +23,21 @@ export default function DataHistory () {
 }
 
 const Container=styled.div`
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+    padding: 20px;
+
+    h1 {
+        color: #126ba5;
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    p {
+        font-size: 18px;
+        color: #666666;
+    }
 `
